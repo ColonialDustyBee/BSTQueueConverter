@@ -2,9 +2,23 @@
 #include <iostream>
 
 using namespace std;
-BinarySearchTree::BinarySearchTree() { };
+BinarySearchTree::BinarySearchTree() {
+	length = 100; // sets a default value
+	front = 0;
+	end = 0;
+	queue = new int[length];
+}
+BinarySearchTree::BinarySearchTree(int max) {
+	length = max + 1; // initializes value given from list
+	front = 0;
+	end = 0;
+	queue = new int[length];
+}
+BinarySearchTree::~BinarySearchTree() {
+	delete[] queue;
+}
 
-int BinarySearchTree::GetLength() {
+int BinarySearchTree::getLength() {
 	return CountNodes(tree); // this might end up causing an issue
 }
 int BinarySearchTree::CountNodes(Node*& tree) {
@@ -13,7 +27,7 @@ int BinarySearchTree::CountNodes(Node*& tree) {
 	}
 	else {
 		return CountNodes(tree->left) + CountNodes(tree->right) + 1;
-	} // simply returns values of left subtree and right subtree which also includes the offset of + 1.
+	} // Based on equation N total nodes = Total Nodes from left subtree + total nodes from right subtree + 1;
 }
 /*
 	Three cases to worry about
@@ -71,7 +85,7 @@ Three cases to worry
    \
    19 - Deleting 19 just requires us to sever link with 17 and then delete 19
 
-- Case 2 One child node - link parent to child node being deleted since BST properties MUST be conserved
+- Case 2 One child node - link parent to child node being deleted since BST properties MUST be conserved, could be either LEFT or RIGHT subtree in this case
 	 12
 	/  \
    5    15
@@ -105,9 +119,9 @@ void BinarySearchTree::deleteItem(int value) {
 }
 int BinarySearchTree::findMin(Node*& tree) {
 	int value = 0;
-	while (tree->right != nullptr) {
-		tree = tree->right;
+	while (tree->right != nullptr) { // right rightmost value
 		value = tree->info; // rewrite value
+		tree = tree->right;
 	}
 	return value;
 }
@@ -134,13 +148,13 @@ void BinarySearchTree::DeleteNodeFound(Node*& tree, int value) {
 	// Case 2 - one child node in the node we wish to delete
 	else if (tree->left == nullptr) {
 		Node* temp = tree; // make temp ptr.
-		tree = tree->right;
-		delete temp;
+		tree = tree->right; // assign value to rightmost
+		delete temp; // Delete node.
 	}
 	else if (tree->right == nullptr) {
-		Node* temp = tree;
+		Node* temp = tree; // make temp ptr
 		tree = tree->left; // assign value to left most.
-		delete temp;
+		delete temp; // delete node
 	}
 	// Case 3  - two children nodes connected to node we wish to delete --MUST FIX--
 	else {
@@ -153,17 +167,24 @@ void BinarySearchTree::DeleteNodeFound(Node*& tree, int value) {
 	
 	
 }
-void BinarySearchTree::printTree(){ // meant to be for the user to call.
-	printTree(tree);
+void BinarySearchTree::Enqueue(){ // meant to be for the user to call.
+	Enqueue(tree);
 }
-// we should also make a member function that prints the entire tree
-void BinarySearchTree::printTree(Node*& tree) {
+
+void BinarySearchTree::Enqueue(Node*& tree) { // Overloaded enqueue operation that essentially acts like a BST print tree function
 	if (tree == nullptr) {
 		return;
 	}
 	else {
-		cout << tree->info << endl;
-		printTree(tree->left);
-		printTree(tree->right);	
+		// in order traversal
+		Enqueue(tree->left);
+		queue[end] = tree->info;
+		end = end + 1;
+		Enqueue(tree->right);	
 	}
+}
+int BinarySearchTree::Dequeue() {
+	int item = queue[front];
+	front = front + 1;
+	return item;
 }
