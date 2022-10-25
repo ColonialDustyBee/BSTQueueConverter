@@ -3,34 +3,41 @@ class BinarySearchTree
 {
 	/*
 		BST can be defined through the use of a structure
-		To clarify, BSTs should have the following methods-
-		GetLength - Should simply count the number of nodes, will have member function of CountNodes which will count the nodes recursively.
-		getItem - Should insert a Node within the tree with a given value
-		deleteItem - Should delete a Node within the tree, should consider 3 cases to solve it recursively.
+		To clarify, BSTs at the very least should have the following operations available - 
+		getLength - simply returns the total number of nodes.
+		printTree - in this case it will be enqueue since we're converting this BST into a queue in inorder form, will be accompanied by a dequeue that will return item.
+		retrieve - returns items from a particular node - will be subtituted for putItem in this case.
+		insert - essentially allows us to initialize the node basically. 
+		
 
 	*/
 private:
-	struct Node { // Define a structure
+	struct Node { // Define BST
 		Node* left;
 		Node* right;
 		int info;
 	}*tree = nullptr;
 	
-	int length = 0;  // Length of structure.
+	int length = 0;  // Length of queue
+	int front = 0;
+	int end = 0;
+	int* queue;
 	void insert(Node*&, int); // Takes value and inserts it
-	int retrieve(Node*&, int);
-	void Delete(Node*&, int);
-	int findMin(Node*&);
-	void printTree(Node*&);
-	void DeleteNodeFound(Node*&, int);
+	int retrieve(Node*&, int); // called by putItem
+	void Delete(Node*&, int); // Called by deleteItem
+	void DeleteNodeFound(Node*&, int); // Called by Delete
+	int findMin(Node*&); // Meant for case 3 in deleting a node.
+	void Enqueue(Node*&);
 	int CountNodes(Node*&); // Private member function
 
 public:
-	BinarySearchTree(); // Constructor
-	int GetLength();
-	void printTree();
+	BinarySearchTree(); //  Default Constructor
+	BinarySearchTree(int); // Parameterized constructor
+	~BinarySearchTree();
+	int getLength();
+	void Enqueue();
+	int Dequeue();
 	void putItem(int);
 	int getItem(int);
 	void deleteItem(int);
 };
-
