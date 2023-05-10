@@ -6,4 +6,4 @@ To get started on this project you will need to create a .txt file with the word
 
 This will ensure that the BST is properly created.
 
-Afterwards you are welcome to run through various commands that the BST has alongside with beginning the conversion into a queue respectively.
+Afterwards, it will generate a queue where it will generate a .txt file while dumping the numbers that are within the queue in ascending order to show that the BST to Queue works as intended.
